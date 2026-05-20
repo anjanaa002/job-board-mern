@@ -733,7 +733,8 @@ function Employer() {
     async (id, status) => {
 
       await axios.put(
-        `http://localhost:5000/applications/${id}`,
+        // `http://localhost:5000/applications/${id}`,
+        `https://job-board-mern-grfk.onrender.com/applications/${id}`,
         { status }
       );
 
