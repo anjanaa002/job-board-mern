@@ -34,7 +34,8 @@ function Applications() {
 
       const res =
         await axios.get(
-          `http://localhost:5000/employer-applications/${employerEmail}`
+          // `http://localhost:5000/employer-applications/${employerEmail}`
+          `https://job-board-mern-grfk.onrender.com/employer-applications/${employerEmail}`
         );
 
       setApplications(res.data);

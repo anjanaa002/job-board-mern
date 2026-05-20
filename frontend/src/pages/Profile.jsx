@@ -195,7 +195,8 @@ function Profile() {
 
       const res =
         await axios.get(
-          `http://localhost:5000/profile/${email}`
+          // `http://localhost:5000/profile/${email}`
+          `https://job-board-mern-grfk.onrender.com/profile/${email}`
         );
 
       setData(res.data);
@@ -251,7 +252,8 @@ const editName = async () => {
   const email = localStorage.getItem("email");
 
   const res = await axios.put(
-    `http://localhost:5000/update-user/${email}`,
+    // `http://localhost:5000/update-user/${email}`,
+    `https://job-board-mern-grfk.onrender.com/update-user/${email}`,
     { name: newName }
   );
 

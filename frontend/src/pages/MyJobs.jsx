@@ -31,7 +31,8 @@ function MyJobs() {
   const fetchJobs = async () => {
 
     const res = await axios.get(
-      "http://localhost:5000/jobs"
+      // "http://localhost:5000/jobs"
+      "https://job-board-mern-grfk.onrender.com/jobs"
     );
 
     const filtered =

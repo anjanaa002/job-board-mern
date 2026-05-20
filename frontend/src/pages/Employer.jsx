@@ -722,7 +722,8 @@ function Employer() {
     async (id) => {
 
       await axios.delete(
-        `http://localhost:5000/jobs/${id}`
+        // `http://localhost:5000/jobs/${id}`
+        `https://job-board-mern-grfk.onrender.com/jobs/${id}`
       );
 
       fetchJobs();

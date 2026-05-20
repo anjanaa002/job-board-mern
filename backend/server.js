@@ -1,290 +1,360 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const cors = require("cors");
+// const dotenv = require("dotenv");
+// const bcrypt = require("bcryptjs");
+// const nodemailer = require("nodemailer");
 
-dotenv.config();
+// dotenv.config();
 
-const User = require("./models/User");
-const Job = require("./models/Job");
-const Application = require("./models/Application");
+// const User = require("./models/User");
+// const Job = require("./models/Job");
+// const Application = require("./models/Application");
 
-const app = express();
+// const app = express();
 
-app.use(cors());
-app.use(express.json());
+// app.use(cors());
+// app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB Connected"))
-.catch((err) => console.log(err));
-
-
-// REGISTER
-app.post("/register", async (req, res) => {
-
-  const { name, email, password, role } = req.body;
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-    role
-  });
-
-  res.json(user);
-});
+// mongoose.connect(process.env.MONGO_URI)
+// .then(() => console.log("MongoDB Connected"))
+// .catch((err) => console.log(err));
 
 
-// LOGIN
-app.post("/login", async (req, res) => {
+// // REGISTER
+// app.post("/register", async (req, res) => {
 
-  const { email, password } = req.body;
+//   const { name, email, password, role } = req.body;
 
-  const user = await User.findOne({ email });
+//   const hashedPassword = await bcrypt.hash(password, 10);
 
-  if (!user) {
-    return res.json({ message: "User not found" });
-  }
+//   const user = await User.create({
+//     name,
+//     email,
+//     password: hashedPassword,
+//     role
+//   });
 
-  const validPassword = await bcrypt.compare(
-    password,
-    user.password
-  );
+//   res.json(user);
+// });
 
-  if (!validPassword) {
-    return res.json({ message: "Wrong password" });
-  }
 
-  res.json(user);
-});
+// // LOGIN
+// app.post("/login", async (req, res) => {
 
-// app.put("/update-user/:email",
-//   async (req, res) => {
+//   const { email, password } = req.body;
+
+//   const user = await User.findOne({ email });
+
+//   if (!user) {
+//     return res.json({ message: "User not found" });
+//   }
+
+//   const validPassword = await bcrypt.compare(
+//     password,
+//     user.password
+//   );
+
+//   if (!validPassword) {
+//     return res.json({ message: "Wrong password" });
+//   }
+
+//   res.json(user);
+// });
+
+// // app.put("/update-user/:email",
+// //   async (req, res) => {
+
+// //   const updatedUser =
+// //     await User.findOneAndUpdate(
+
+// //       {
+// //         email:
+// //           req.params.email
+// //       },
+
+// //       {
+// //         name:
+// //           req.body.name
+// //       },
+
+// //       {
+// //         new: true
+// //       }
+// //     );
+
+// //   res.json(updatedUser);
+// // });
+
+
+
+// app.put("/update-user/:email", async (req, res) => {
 
 //   const updatedUser =
 //     await User.findOneAndUpdate(
 
-//       {
-//         email:
-//           req.params.email
-//       },
+//       { email: req.params.email },
 
-//       {
-//         name:
-//           req.body.name
-//       },
+//       { name: req.body.name },
 
-//       {
-//         new: true
-//       }
+//       { new: true } // VERY IMPORTANT
+
 //     );
 
-//   res.json(updatedUser);
+//   res.json({
+//     name: updatedUser.name,
+//     email: updatedUser.email
+//   });
 // });
 
 
 
-app.put("/update-user/:email", async (req, res) => {
+// app.post("/jobs", async (req, res) => {
 
-  const updatedUser =
-    await User.findOneAndUpdate(
+//   const job = await Job.create({
 
-      { email: req.params.email },
+//     title:
+//       req.body.title,
 
-      { name: req.body.name },
+//     company:
+//       req.body.company,
 
-      { new: true } // VERY IMPORTANT
+//     location:
+//       req.body.location,
 
-    );
+//     salary:
+//       req.body.salary,
 
-  res.json({
-    name: updatedUser.name,
-    email: updatedUser.email
-  });
-});
+//     description:
+//       req.body.description,
 
-
-
-app.post("/jobs", async (req, res) => {
-
-  const job = await Job.create({
-
-    title:
-      req.body.title,
-
-    company:
-      req.body.company,
-
-    location:
-      req.body.location,
-
-    salary:
-      req.body.salary,
-
-    description:
-      req.body.description,
-
-    employerEmail:
-      req.body.employerEmail
-
-  });
-
-  res.json(job);
-});
-
-// GET JOBS
-app.get("/jobs", async (req, res) => {
-
-  const jobs = await Job.find();
-
-  res.json(jobs);
-});
-
-
-// APPLY JOB
-// app.post("/apply", async (req, res) => {
-
-//   const application = await Application.create(req.body);
-
-//   res.json(application);
-// });
-
-// app.post("/apply", async (req, res) => {
-
-//   const application = await Application.create({
-
-//     candidateName: req.body.candidateName,
-
-//     candidateEmail: req.body.candidateEmail,
-
-//     jobTitle: req.body.jobTitle
+//     employerEmail:
+//       req.body.employerEmail
 
 //   });
 
-//   res.json(application);
+//   res.json(job);
+// });
+
+// // GET JOBS
+// app.get("/jobs", async (req, res) => {
+
+//   const jobs = await Job.find();
+
+//   res.json(jobs);
 // });
 
 
-// app.post("/apply", async (req, res) => {
+// // APPLY JOB
+// // app.post("/apply", async (req, res) => {
 
-//   const application =
-//     await Application.create({
+// //   const application = await Application.create(req.body);
 
-//       candidateName:
-//         req.body.candidateName,
+// //   res.json(application);
+// // });
 
-//       candidateEmail:
-//         req.body.candidateEmail,
+// // app.post("/apply", async (req, res) => {
 
-//       jobTitle:
-//         req.body.jobTitle,
+// //   const application = await Application.create({
 
-//       resume:
-//         req.body.resume
+// //     candidateName: req.body.candidateName,
 
-//     });
+// //     candidateEmail: req.body.candidateEmail,
 
-//   res.json(application);
-// });
+// //     jobTitle: req.body.jobTitle
 
+// //   });
 
-// app.post("/apply", async (req, res) => {
-
-//   const application =
-//     await Application.create({
-
-//       candidateName:
-//         req.body.candidateName,
-
-//       candidateEmail:
-//         req.body.candidateEmail,
-
-//       employerEmail:
-//         req.body.employerEmail,
-
-//       jobTitle:
-//         req.body.jobTitle,
-
-//       resume:
-//         req.body.resume
-
-//     });
-
-//   res.json(application);
-// });
-
-// app.post("/apply", async (req, res) => {
-
-//   const application =
-//     await Application.create({
-
-//       candidateName:
-//         req.body.candidateName,
-
-//       candidateEmail:
-//         req.body.candidateEmail,
-
-//       employerEmail:
-//         req.body.employerEmail,
-
-//       jobTitle:
-//         req.body.jobTitle,
-
-//       company:
-//         req.body.company,
-
-//       location:
-//         req.body.location,
-
-//       resume:
-//         req.body.resume
-
-//     });
-
-//   res.json(application);
-// });
+// //   res.json(application);
+// // });
 
 
-// app.post("/apply", async (req, res) => {
+// // app.post("/apply", async (req, res) => {
 
-//   const application =
-//     await Application.create({
+// //   const application =
+// //     await Application.create({
 
-//       candidateName:
-//         req.body.candidateName,
+// //       candidateName:
+// //         req.body.candidateName,
 
-//       candidateEmail:
-//         req.body.candidateEmail,
+// //       candidateEmail:
+// //         req.body.candidateEmail,
 
-//       employerEmail:
-//         req.body.employerEmail,
+// //       jobTitle:
+// //         req.body.jobTitle,
 
-//       jobTitle:
-//         req.body.jobTitle,
+// //       resume:
+// //         req.body.resume
 
-//       company:
-//         req.body.company,
+// //     });
 
-//       location:
-//         req.body.location,
+// //   res.json(application);
+// // });
 
-//       salary:
-//         req.body.salary,
 
-//       description:
-//         req.body.description,
+// // app.post("/apply", async (req, res) => {
 
-//       resume:
-//         req.body.resume
+// //   const application =
+// //     await Application.create({
 
-//     });
+// //       candidateName:
+// //         req.body.candidateName,
 
-//   res.json(application);
-// });
+// //       candidateEmail:
+// //         req.body.candidateEmail,
+
+// //       employerEmail:
+// //         req.body.employerEmail,
+
+// //       jobTitle:
+// //         req.body.jobTitle,
+
+// //       resume:
+// //         req.body.resume
+
+// //     });
+
+// //   res.json(application);
+// // });
+
+// // app.post("/apply", async (req, res) => {
+
+// //   const application =
+// //     await Application.create({
+
+// //       candidateName:
+// //         req.body.candidateName,
+
+// //       candidateEmail:
+// //         req.body.candidateEmail,
+
+// //       employerEmail:
+// //         req.body.employerEmail,
+
+// //       jobTitle:
+// //         req.body.jobTitle,
+
+// //       company:
+// //         req.body.company,
+
+// //       location:
+// //         req.body.location,
+
+// //       resume:
+// //         req.body.resume
+
+// //     });
+
+// //   res.json(application);
+// // });
+
+
+// // app.post("/apply", async (req, res) => {
+
+// //   const application =
+// //     await Application.create({
+
+// //       candidateName:
+// //         req.body.candidateName,
+
+// //       candidateEmail:
+// //         req.body.candidateEmail,
+
+// //       employerEmail:
+// //         req.body.employerEmail,
+
+// //       jobTitle:
+// //         req.body.jobTitle,
+
+// //       company:
+// //         req.body.company,
+
+// //       location:
+// //         req.body.location,
+
+// //       salary:
+// //         req.body.salary,
+
+// //       description:
+// //         req.body.description,
+
+// //       resume:
+// //         req.body.resume
+
+// //     });
+
+// //   res.json(application);
+// // });
+
+
+// // app.post("/apply", async (req, res) => {
+
+// //   const {
+// //     candidateEmail,
+// //     jobTitle,
+// //     employerEmail
+// //   } = req.body;
+
+// //   // 🔥 CHECK IF ALREADY APPLIED
+// //   const existing =
+// //     await Application.findOne({
+
+// //       candidateEmail,
+// //       jobTitle,
+// //       employerEmail
+
+// //     });
+
+// //   if (existing) {
+
+// //     return res.json({
+// //       message:
+// //         "Already Applied"
+// //     });
+// //   }
+
+// //   const application =
+// //     await Application.create({
+
+// //       candidateName:
+// //         req.body.candidateName,
+
+// //       candidateEmail:
+
+// //         req.body.candidateEmail,
+
+// //       employerEmail:
+
+// //         req.body.employerEmail,
+
+// //       jobTitle:
+
+// //         req.body.jobTitle,
+
+// //       company:
+
+// //         req.body.company,
+
+// //       location:
+
+// //         req.body.location,
+
+// //       salary:
+
+// //         req.body.salary,
+
+// //       description:
+
+// //         req.body.description,
+
+// //       resume:
+
+// //         req.body.resume
+
+// //     });
+
+// //   res.json(application);
+// // });
 
 
 // app.post("/apply", async (req, res) => {
@@ -295,148 +365,263 @@ app.get("/jobs", async (req, res) => {
 //     employerEmail
 //   } = req.body;
 
-//   // 🔥 CHECK IF ALREADY APPLIED
-//   const existing =
-//     await Application.findOne({
+//   // 🔥 DEBUG (optional)
+//   console.log(req.body);
 
-//       candidateEmail,
-//       jobTitle,
-//       employerEmail
-
-//     });
+//   // 🔴 STRICT CHECK
+//   const existing = await Application.findOne({
+//     candidateEmail: candidateEmail,
+//     jobTitle: jobTitle,
+//     employerEmail: employerEmail
+//   });
 
 //   if (existing) {
-
 //     return res.json({
-//       message:
-//         "Already Applied"
+//       message: "Already Applied"
 //     });
 //   }
 
-//   const application =
-//     await Application.create({
+//   const application = await Application.create({
+//     candidateName: req.body.candidateName,
+//     candidateEmail,
+//     employerEmail,
+//     jobTitle,
+//     company: req.body.company,
+//     location: req.body.location,
+//     salary: req.body.salary,
+//     description: req.body.description,
+//     resume: req.body.resume
+//   });
 
-//       candidateName:
-//         req.body.candidateName,
-
-//       candidateEmail:
-
-//         req.body.candidateEmail,
-
-//       employerEmail:
-
-//         req.body.employerEmail,
-
-//       jobTitle:
-
-//         req.body.jobTitle,
-
-//       company:
-
-//         req.body.company,
-
-//       location:
-
-//         req.body.location,
-
-//       salary:
-
-//         req.body.salary,
-
-//       description:
-
-//         req.body.description,
-
-//       resume:
-
-//         req.body.resume
-
-//     });
-
-//   res.json(application);
+//   return res.json(application);
 // });
 
 
-app.post("/apply", async (req, res) => {
 
-  const {
+// // GET APPLICATIONS
+// app.get("/applications", async (req, res) => {
+
+//   const applications = await Application.find();
+
+//   res.json(applications);
+// });
+
+// app.get(
+//   "/employer-applications/:email",
+
+//   async (req, res) => {
+
+//     const applications =
+//       await Application.find({
+
+//         employerEmail:
+//           req.params.email
+
+//       });
+
+//     res.json(applications);
+// });
+
+// app.delete("/jobs/:id",
+//   async (req, res) => {
+
+//   await Job.findByIdAndDelete(
+//     req.params.id
+//   );
+
+//   res.json({
+//     message: "Deleted"
+//   });
+// });
+
+// // UPDATE STATUS
+// app.put("/applications/:id", async (req, res) => {
+
+//   const updated = await Application.findByIdAndUpdate(
+//     req.params.id,
+//     req.body,
+//     { new: true }
+//   );
+
+//   res.json(updated);
+// });
+// app.get("/profile/:email", async (req, res) => {
+
+//   const user = await User.findOne({
+//     email: req.params.email
+//   });
+
+
+
+  
+  
+//   const applications =
+//     await Application.find({
+//       candidateEmail: req.params.email
+//     });
+
+//   res.json({
+//     user,
+//     applications
+//   });
+// });
+
+
+// app.put("/jobs/:id",
+//   async (req, res) => {
+
+//   await Job.findByIdAndUpdate(
+//     req.params.id,
+//     req.body
+//   );
+
+//   res.json({
+//     message: "Updated"
+//   });
+// });
+
+// const PORT = 5000;
+
+// app.listen(PORT, () => {
+//   console.log("Server Running");
+// });
+
+
+
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const bcrypt = require("bcryptjs");
+
+dotenv.config();
+
+const User = require("./models/User");
+const Job = require("./models/Job");
+const Application = require("./models/Application");
+
+const app = express();
+
+// ✅ CORS FIX (IMPORTANT FOR VERCEL)
+app.use(cors({
+  origin: "https://job-board-mern-psi.vercel.app",
+  credentials: true
+}));
+
+app.use(express.json());
+
+/* ---------------- CONNECT MONGODB ---------------- */
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+
+/* ---------------- REGISTER ---------------- */
+app.post("/register", async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role
+    });
+
+    res.json(user);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
+/* ---------------- LOGIN ---------------- */
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({ message: "User not found" });
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+
+    if (!validPassword) {
+      return res.json({ message: "Wrong password" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
+/* ---------------- UPDATE USER ---------------- */
+app.put("/update-user/:email", async (req, res) => {
+  const updatedUser = await User.findOneAndUpdate(
+    { email: req.params.email },
+    { name: req.body.name },
+    { new: true }
+  );
+
+  res.json(updatedUser);
+});
+
+/* ---------------- CREATE JOB ---------------- */
+app.post("/jobs", async (req, res) => {
+  const job = await Job.create(req.body);
+  res.json(job);
+});
+
+/* ---------------- GET JOBS ---------------- */
+app.get("/jobs", async (req, res) => {
+  const jobs = await Job.find();
+  res.json(jobs);
+});
+
+/* ---------------- APPLY JOB ---------------- */
+app.post("/apply", async (req, res) => {
+  const { candidateEmail, jobTitle, employerEmail } = req.body;
+
+  const existing = await Application.findOne({
     candidateEmail,
     jobTitle,
     employerEmail
-  } = req.body;
-
-  // 🔥 DEBUG (optional)
-  console.log(req.body);
-
-  // 🔴 STRICT CHECK
-  const existing = await Application.findOne({
-    candidateEmail: candidateEmail,
-    jobTitle: jobTitle,
-    employerEmail: employerEmail
   });
 
   if (existing) {
-    return res.json({
-      message: "Already Applied"
-    });
+    return res.json({ message: "Already Applied" });
   }
 
-  const application = await Application.create({
-    candidateName: req.body.candidateName,
-    candidateEmail,
-    employerEmail,
-    jobTitle,
-    company: req.body.company,
-    location: req.body.location,
-    salary: req.body.salary,
-    description: req.body.description,
-    resume: req.body.resume
-  });
-
-  return res.json(application);
+  const application = await Application.create(req.body);
+  res.json(application);
 });
 
-
-
-// GET APPLICATIONS
+/* ---------------- GET APPLICATIONS ---------------- */
 app.get("/applications", async (req, res) => {
-
   const applications = await Application.find();
+  res.json(applications);
+});
+
+/* ---------------- EMPLOYER APPLICATIONS ---------------- */
+app.get("/employer-applications/:email", async (req, res) => {
+  const applications = await Application.find({
+    employerEmail: req.params.email
+  });
 
   res.json(applications);
 });
 
-app.get(
-  "/employer-applications/:email",
-
-  async (req, res) => {
-
-    const applications =
-      await Application.find({
-
-        employerEmail:
-          req.params.email
-
-      });
-
-    res.json(applications);
+/* ---------------- DELETE JOB ---------------- */
+app.delete("/jobs/:id", async (req, res) => {
+  await Job.findByIdAndDelete(req.params.id);
+  res.json({ message: "Deleted" });
 });
 
-app.delete("/jobs/:id",
-  async (req, res) => {
-
-  await Job.findByIdAndDelete(
-    req.params.id
-  );
-
-  res.json({
-    message: "Deleted"
-  });
-});
-
-// UPDATE STATUS
+/* ---------------- UPDATE APPLICATION STATUS ---------------- */
 app.put("/applications/:id", async (req, res) => {
-
   const updated = await Application.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -445,40 +630,32 @@ app.put("/applications/:id", async (req, res) => {
 
   res.json(updated);
 });
-app.get("/profile/:email", async (req, res) => {
 
-  const user = await User.findOne({
-    email: req.params.email
+/* ---------------- PROFILE ---------------- */
+app.get("/profile/:email", async (req, res) => {
+  const user = await User.findOne({ email: req.params.email });
+
+  const applications = await Application.find({
+    candidateEmail: req.params.email
   });
 
+  res.json({ user, applications });
+});
 
-
-  app.put("/jobs/:id",
-  async (req, res) => {
-
-  await Job.findByIdAndUpdate(
+/* ---------------- UPDATE JOB ---------------- */
+app.put("/jobs/:id", async (req, res) => {
+  const updated = await Job.findByIdAndUpdate(
     req.params.id,
-    req.body
+    req.body,
+    { new: true }
   );
 
-  res.json({
-    message: "Updated"
-  });
+  res.json(updated);
 });
 
-  const applications =
-    await Application.find({
-      candidateEmail: req.params.email
-    });
-
-  res.json({
-    user,
-    applications
-  });
-});
-
-const PORT = 5000;
+/* ---------------- START SERVER ---------------- */
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log("Server Running");
+  console.log("Server Running on port " + PORT);
 });
