@@ -28,7 +28,9 @@ function AddJob() {
     e.preventDefault();
 
     await axios.post(
-      "http://localhost:5000/jobs",
+      // "http://localhost:5000/jobs",
+
+      "https://job-board-mern-grfk.onrender.com/jobs",
       {
         ...job,
         employerEmail

@@ -304,7 +304,9 @@ const [salary,
     //   );
 
    const res =  await axios.post(
-  "http://localhost:5000/apply",
+  // "http://localhost:5000/apply",
+
+  "https://job-board-mern-grfk.onrender.com/apply",
 //   {
 //     candidateName,
 //     candidateEmail,

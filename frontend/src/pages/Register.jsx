@@ -15,7 +15,8 @@ function Register() {
     e.preventDefault();
 
     await axios.post(
-      "http://localhost:5000/register",
+      // "http://localhost:5000/register" 
+    "https://job-board-mern-grfk.onrender.com/register",
       form
     );
 
