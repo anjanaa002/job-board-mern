@@ -883,7 +883,7 @@ function Employer() {
                   onClick={() =>
                     updateStatus(
                       app._id,
-                      "Selected"
+                      "Shortlisted"
                     )
                   }
                 >
