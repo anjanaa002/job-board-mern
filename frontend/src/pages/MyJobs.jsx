@@ -49,7 +49,8 @@ function MyJobs() {
     async(id)=>{
 
       await axios.delete(
-        `http://localhost:5000/jobs/${id}`
+        // `http://localhost:5000/jobs/${id}`
+        `https://job-board-mern-grfk.onrender.com/jobs/${id}`
       );
 
       fetchJobs();
@@ -83,7 +84,8 @@ const editJob =
       );
 
     await axios.put(
-      `http://localhost:5000/jobs/${job._id}`,
+      // `http://localhost:5000/jobs/${job._id}`,
+      `https://job-board-mern-grfk.onrender.com/jobs/${job._id}`,
       {
         title,
         company,

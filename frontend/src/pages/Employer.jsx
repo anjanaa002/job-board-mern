@@ -677,7 +677,8 @@ function Employer() {
   const fetchJobs = async () => {
 
     const res = await axios.get(
-      "http://localhost:5000/jobs"
+      // "http://localhost:5000/jobs"
+      "https://job-board-mern-grfk.onrender.com/jobs"
     );
 
     const filtered =
@@ -695,7 +696,8 @@ function Employer() {
 
       const res =
         await axios.get(
-          `http://localhost:5000/employer-applications/${employerEmail}`
+          // `http://localhost:5000/employer-applications/${employerEmail}`
+          `https://job-board-mern-grfk.onrender.com/employer-applications/${employerEmail}`
         );
 
       setApplications(res.data);
@@ -706,7 +708,8 @@ function Employer() {
     e.preventDefault();
 
     await axios.post(
-      "http://localhost:5000/jobs",
+      // "http://localhost:5000/jobs",
+      "https://job-board-mern-grfk.onrender.com/jobs",
       {
         ...job,
         employerEmail
